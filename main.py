@@ -38,16 +38,17 @@ from storage import load_tasks, save_tasks
 from task_manager import add_task, edit_task, complete_task, delete_task
 from task_utils import check_deadline, get_completed_tasks, get_pending_tasks, sort_tasks
 
-def show_menu():    #用 print() 打印主菜单
-    print("1.添加任务")
-    print("2.查看任务")
-    print("3.编辑任务")
-    print("4.完成任务")
-    print("5.删除任务")
-    print("6.查看已完成任务")
-    print("7.按顺序查看任务")
-    print("0.退出")
-    pass
+def show_menu():
+    print()
+    print("=" * 44)
+    print("                TO-DO LIST")
+    print("                 待办清单")
+    print("-" * 44)
+    print("  1. 添加任务         5. 删除任务")
+    print("  2. 查看待办         6. 查看完成")
+    print("  3. 编辑任务         7. 排序任务")
+    print("  4. 完成任务         0. 退出程序")
+    print("=" * 44)
 
 
 def display_tasks(tasks):   #将任务列表逐行打印到终端，并提示逾期或即将到期的任务。
@@ -85,7 +86,7 @@ def main():     #主函数
 
     while True:
         show_menu()
-        choice = input("请输入你的选择：").strip()
+        choice = input("请选择操作 > ").strip()
 
         if choice == "0":   #退出
             print("已退出，再见！")
