@@ -17,12 +17,47 @@
 不能把损坏的数据文件覆盖掉。
 """
 
+import json
+import os
+
+
+# 始终读写 storage.py 同级的 tasks.json，不受启动目录影响
+TASKS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tasks.json")
+
 
 def load_tasks():
-    # TODO（D）：在这里实现；读取 tasks.json → 返回列表 / [] / None
-    pass
+    # 第一次运行时还没有数据文件，直接返回空列表
+    if not os.path.exists(TASKS_FILE):
+        return []
+
+    try:
+        with open(TASKS_FILE, "r", encoding="utf-8") as file:
+            tasks = json.load(file)
+    except (json.JSONDecodeError, UnicodeDecodeError) as error:
+        print(f"读取任务失败：tasks.json 内容损坏（{error}）。")
+        return None
+    except OSError as error:
+        print(f"读取任务失败：{error}")
+        return None
+
+    # 数据文件的最外层必须是任务列表
+    if not isinstance(tasks, list):
+        print("读取任务失败：tasks.json 的顶层内容必须是列表。")
+        return None
+
+    return tasks
 
 
 def save_tasks(tasks):
-    # TODO（D）：在这里实现；写入 tasks.json → 返回 True / False
-    pass
+    if not isinstance(tasks, list):
+        print("保存任务失败：任务数据必须是列表。")
+        return False
+
+    try:
+        with open(TASKS_FILE, "w", encoding="utf-8") as file:
+            json.dump(tasks, file, ensure_ascii=False, indent=4)
+    except (OSError, TypeError, ValueError) as error:
+        print(f"保存任务失败：{error}")
+        return False
+
+    return True

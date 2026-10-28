@@ -25,12 +25,12 @@ from datetime import datetime, timedelta
 def get_pending_tasks(tasks):
     # TODO（C）：在这里实现；返回未完成任务的新列表
     # 假设未完成的任务status不为'completed',或者为'pending'
-    return [task for task in tasks if task.get('status') != 'completed']
+    return [task for task in tasks if not task.get("completed",False) ]
 
 
 def get_completed_tasks(tasks):
     # TODO（C）：在这里实现；返回已完成的新列表，最新完成在前
-    completed = [task for task in tasks if task.get('status') == 'completed']
+    completed = [task for task in tasks if task.get("completed",False)]
     # 根据completed_at降序排列， 假设缺失该字段的任务排在最后
     return sorted(completed, key=lambda x: x.get('completed_at', ''), reverse=True)
 
@@ -53,7 +53,7 @@ def sort_tasks(tasks, method):
 def check_deadline(task):
     # TODO（C）：在这里实现；返回 completed / overdue / soon / normal
     # 1. 检查是否已完成
-    if task.get('status') == 'completed':
+    if task.get("completed",False):
         return "completed"
     deadline_str = task.get('deadline')
     if not deadline_str:
